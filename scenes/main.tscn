@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://dxca8ur8jh8dy"]
+
+[ext_resource type="Script" uid="uid://bqcd88emyu5kc" path="res://scripts/arena.gd" id="1_arena"]
+[ext_resource type="Script" uid="uid://cexdbd8phcctn" path="res://scripts/player.gd" id="2_player"]
+[ext_resource type="Script" uid="uid://c7t6glq16w8gp" path="res://scripts/health_display.gd" id="4_health"]
+[ext_resource type="Script" uid="uid://y26d113nhrvj" path="res://scripts/debug_attack_spawner.gd" id="5_spawner"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_player"]
+radius = 16.0
+
+[node name="Main" type="Node2D" unique_id=1515014405]
+script = ExtResource("5_spawner")
+arena_p1_path = NodePath("ArenaP1")
+arena_p2_path = NodePath("ArenaP2")
+
+[node name="AttackSpawnTimer" type="Timer" parent="." unique_id=1786318929]
+wait_time = 2.5
+autostart = true
+
+[node name="ArenaP1" type="Node2D" parent="." unique_id=2058010337]
+position = Vector2(40, 120)
+script = ExtResource("1_arena")
+arena_size = Vector2(580, 520)
+border_color = Color(0.35, 0.7, 1, 1)
+
+[node name="Player" type="CharacterBody2D" parent="ArenaP1" unique_id=841406698]
+position = Vector2(290, 260)
+script = ExtResource("2_player")
+
+[node name="PlaceholderShape" type="Polygon2D" parent="ArenaP1/Player" unique_id=1770378973]
+color = Color(0.25, 0.9, 1, 1)
+polygon = PackedVector2Array(0, -16, 11.314, -11.314, 16, 0, 11.314, 11.314, 0, 16, -11.314, 11.314, -16, 0, -11.314, -11.314)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ArenaP1/Player" unique_id=47104325]
+shape = SubResource("CircleShape2D_player")
+
+[node name="ArenaP2" type="Node2D" parent="." unique_id=1806705289]
+position = Vector2(660, 120)
+script = ExtResource("1_arena")
+arena_size = Vector2(580, 520)
+border_color = Color(1, 0.45, 0.3, 1)
+
+[node name="Player" type="CharacterBody2D" parent="ArenaP2" unique_id=1820833081]
+position = Vector2(290, 260)
+script = ExtResource("2_player")
+input_left = &"p2_move_left"
+input_right = &"p2_move_right"
+input_up = &"p2_move_up"
+input_down = &"p2_move_down"
+
+[node name="PlaceholderShape" type="Polygon2D" parent="ArenaP2/Player" unique_id=1134601529]
+color = Color(1, 0.45, 0.3, 1)
+polygon = PackedVector2Array(0, -16, 11.314, -11.314, 16, 0, 11.314, 11.314, 0, 16, -11.314, 11.314, -16, 0, -11.314, -11.314)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ArenaP2/Player" unique_id=934855206]
+shape = SubResource("CircleShape2D_player")
+
+[node name="Separator" type="Line2D" parent="." unique_id=213889985]
+points = PackedVector2Array(640, 104, 640, 656)
+width = 2.0
+default_color = Color(0.32, 0.36, 0.46, 1)
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=1578133581]
+
+[node name="P1HealthLabel" type="Label" parent="HUD" unique_id=1790355430]
+offset_left = 40.0
+offset_top = 36.0
+offset_right = 300.0
+offset_bottom = 76.0
+theme_override_colors/font_color = Color(0.55, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 28
+text = "P1 HP: 150 / 150"
+script = ExtResource("4_health")
+player_path = NodePath("../../ArenaP1/Player")
+player_label = "P1 HP"
+
+[node name="P2HealthLabel" type="Label" parent="HUD" unique_id=515680521]
+offset_left = 660.0
+offset_top = 36.0
+offset_right = 920.0
+offset_bottom = 76.0
+theme_override_colors/font_color = Color(1, 0.65, 0.5, 1)
+theme_override_font_sizes/font_size = 28
+text = "P2 HP: 150 / 150"
+script = ExtResource("4_health")
+player_path = NodePath("../../ArenaP2/Player")
+player_label = "P2 HP"

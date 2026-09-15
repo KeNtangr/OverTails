@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/bomb_attack.gd" id="1_bomb"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_explosion"]
+radius = 80.0
+
+[node name="BombAttack" type="Area2D"]
+collision_layer = 0
+collision_mask = 1
+monitoring = false
+script = ExtResource("1_bomb")
+
+[node name="WarningCircle" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(60, 0, 55.433, 22.961, 42.426, 42.426, 22.961, 55.433, 0, 60, -22.961, 55.433, -42.426, 42.426, -55.433, 22.961, -60, 0, -55.433, -22.961, -42.426, -42.426, -22.961, -55.433, 0, -60, 22.961, -55.433, 42.426, -42.426, 55.433, -22.961)
+color = Color(1, 0.72, 0.12, 0.35)
+
+[node name="ActiveExplosion" type="Polygon2D" parent="."]
+visible = false
+polygon = PackedVector2Array(80, 0, 73.91, 30.615, 56.569, 56.569, 30.615, 73.91, 0, 80, -30.615, 73.91, -56.569, 56.569, -73.91, 30.615, -80, 0, -73.91, -30.615, -56.569, -56.569, -30.615, -73.91, 0, -80, 30.615, -73.91, 56.569, -56.569, 73.91, -30.615)
+color = Color(1, 0.25, 0.05, 0.82)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_explosion")
+disabled = true

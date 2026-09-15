@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/sword_attack.gd" id="1_sword"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_slash"]
+size = Vector2(540, 48)
+
+[node name="SwordAttack" type="Area2D"]
+collision_layer = 0
+collision_mask = 1
+monitoring = false
+script = ExtResource("1_sword")
+
+[node name="WarningLine" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-270, -3, 270, -3, 270, 3, -270, 3)
+color = Color(1, 0.75, 0.15, 0.95)
+
+[node name="ActiveSlash" type="Polygon2D" parent="."]
+visible = false
+polygon = PackedVector2Array(-270, -24, 270, -24, 270, 24, -270, 24)
+color = Color(1, 0.15, 0.12, 0.85)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_slash")
+disabled = true

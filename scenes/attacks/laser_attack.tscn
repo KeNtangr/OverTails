@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/laser_attack.gd" id="1_laser"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_beam"]
+size = Vector2(540, 20)
+
+[node name="LaserAttack" type="Area2D"]
+collision_layer = 0
+collision_mask = 1
+monitoring = false
+script = ExtResource("1_laser")
+
+[node name="WarningLine" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-270, -2, 270, -2, 270, 2, -270, 2)
+color = Color(0.85, 0.25, 1, 0.9)
+
+[node name="ActiveBeam" type="Polygon2D" parent="."]
+visible = false
+polygon = PackedVector2Array(-270, -10, 270, -10, 270, 10, -270, 10)
+color = Color(1, 0.75, 1, 0.95)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_beam")
+disabled = true
