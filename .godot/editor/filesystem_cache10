@@ -1,12 +1,12 @@
 78098b89c88a74ebe8c20117b8754620
-::res://::1789554121
+::res://::1789656630
 AGENTS.md::TextFile::-1::1789494445::0::1::::<><><>0<>0<><>::
 GEMINI.md::TextFile::-1::1789494445::0::1::::<><><>0<>0<><>::
 global.json::JSON::-1::1789486609::0::1::::<><><>0<>0<><>::
 icon.svg::CompressedTexture2D::7136941805187136108::1789486609::1789486658::1::::<><><>0<>0<>0556c8895e20fb0fbb4260c4f8dc6f03<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
 README.md::TextFile::-1::1789486777::0::1::::<><><>0<>0<><>::
-::res://scenes/::1789496210
-main.tscn::PackedScene::8777794219701416490::1789496210::0::1::::<><><>0<>0<><>::uid://bqcd88emyu5kc::::res://scripts/arena.gd<>uid://cexdbd8phcctn::::res://scripts/player.gd<>uid://c7t6glq16w8gp::::res://scripts/health_display.gd<>uid://y26d113nhrvj::::res://scripts/debug_attack_spawner.gd
+::res://scenes/::1789554990
+main.tscn::PackedScene::8777794219701416490::1789554990::0::1::::<><><>0<>0<><>::uid://bqcd88emyu5kc::::res://scripts/arena.gd<>uid://cexdbd8phcctn::::res://scripts/player.gd<>uid://c7t6glq16w8gp::::res://scripts/health_display.gd<>uid://y26d113nhrvj::::res://scripts/debug_attack_spawner.gd
 ::res://scenes/attacks/::1789495852
 bomb_attack.tscn::PackedScene::-1::1789495852::0::1::::<><><>0<>0<><>::res://scripts/bomb_attack.gd
 laser_attack.tscn::PackedScene::-1::1789495852::0::1::::<><><>0<>0<><>::res://scripts/laser_attack.gd

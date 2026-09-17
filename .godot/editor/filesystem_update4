@@ -1,1 +1,2 @@
-res://scenes/main.tscn
+res://scripts/debug_attack_spawner.gd
+res://scripts/player.gd

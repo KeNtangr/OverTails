@@ -18,6 +18,8 @@ const ATTACK_SCENES: Array[PackedScene] = [
 @onready var arena_p2: ArenaScript = get_node_or_null(arena_p2_path) as ArenaScript
 @onready var spawn_timer: Timer = $AttackSpawnTimer
 
+var _spawning_enabled: bool = false
+
 
 func _ready() -> void:
 	if arena_p1 == null or arena_p2 == null:
@@ -26,9 +28,25 @@ func _ready() -> void:
 		return
 
 	spawn_timer.timeout.connect(_spawn_attacks)
+	set_spawning_enabled(false)
+
+
+func set_spawning_enabled(enabled: bool) -> void:
+	_spawning_enabled = enabled
+	if enabled:
+		spawn_timer.start()
+	else:
+		spawn_timer.stop()
+
+
+func is_spawning_enabled() -> bool:
+	return _spawning_enabled
 
 
 func _spawn_attacks() -> void:
+	if not _spawning_enabled:
+		return
+
 	_spawn_random_attack(arena_p1)
 	_spawn_random_attack(arena_p2)
 

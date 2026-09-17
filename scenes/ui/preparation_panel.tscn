@@ -1,0 +1,62 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/preparation_panel.gd" id="1_panel"]
+
+[node name="PreparationPanel" type="PanelContainer"]
+custom_minimum_size = Vector2(540, 224)
+script = ExtResource("1_panel")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 10
+
+[node name="Content" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "PLAYER LOADOUT"
+
+[node name="PreparationContent" type="VBoxContainer" parent="MarginContainer/Content"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="SelectedWeaponLabel" type="Label" parent="MarginContainer/Content/PreparationContent"]
+layout_mode = 2
+text = "Selected weapon: Sword"
+
+[node name="SelectedSlotLabel" type="Label" parent="MarginContainer/Content/PreparationContent"]
+layout_mode = 2
+text = "Target slot: 1"
+
+[node name="Slot1Label" type="Label" parent="MarginContainer/Content/PreparationContent"]
+layout_mode = 2
+text = "> Slot 1: Empty"
+
+[node name="Slot2Label" type="Label" parent="MarginContainer/Content/PreparationContent"]
+layout_mode = 2
+text = "  Slot 2: Empty"
+
+[node name="Slot3Label" type="Label" parent="MarginContainer/Content/PreparationContent"]
+layout_mode = 2
+text = "  Slot 3: Empty"
+
+[node name="ReadyStateLabel" type="Label" parent="MarginContainer/Content/PreparationContent"]
+layout_mode = 2
+text = "State: EDITING"
+
+[node name="InstructionsLabel" type="Label" parent="MarginContainer/Content/PreparationContent"]
+layout_mode = 2
+text = "Controls"
+autowrap_mode = 2
+
+[node name="AttackSummaryLabel" type="Label" parent="MarginContainer/Content"]
+visible = false
+layout_mode = 2
+text = "P1: Empty | Empty | Empty"
+autowrap_mode = 2
