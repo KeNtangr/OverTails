@@ -3,7 +3,7 @@ extends Node
 
 const PlayerScript = preload("res://scripts/player.gd")
 const WeaponDefinitionScript = preload("res://scripts/weapon_definition.gd")
-const DebugAttackSpawnerScript = preload("res://scripts/debug_attack_spawner.gd")
+const AttackCoordinatorScript = preload("res://scripts/attack_coordinator.gd")
 
 enum Phase {
 	PREPARATION,
@@ -16,16 +16,16 @@ signal player_ready_changed(player_index: int, is_ready: bool)
 var current_phase: Phase = Phase.PREPARATION
 var _players: Array[PlayerScript] = []
 var _player_ready: Array[bool] = [false, false]
-var _debug_attack_spawner: DebugAttackSpawnerScript
+var _attack_coordinator: AttackCoordinatorScript
 
 
 func configure(
 	player_one: PlayerScript,
 	player_two: PlayerScript,
-	debug_attack_spawner: DebugAttackSpawnerScript
+	attack_coordinator: AttackCoordinatorScript
 ) -> void:
 	_players = [player_one, player_two]
-	_debug_attack_spawner = debug_attack_spawner
+	_attack_coordinator = attack_coordinator
 
 	player_one.loadout_changed.connect(_on_player_loadout_changed.bind(0))
 	player_two.loadout_changed.connect(_on_player_loadout_changed.bind(1))
@@ -105,8 +105,8 @@ func _apply_phase_state() -> void:
 	for player: PlayerScript in _players:
 		player.set_movement_enabled(attack_active)
 
-	if _debug_attack_spawner != null:
-		_debug_attack_spawner.set_spawning_enabled(attack_active)
+	if _attack_coordinator != null:
+		_attack_coordinator.set_spawning_enabled(attack_active)
 
 
 func _is_valid_player_index(player_index: int) -> bool:

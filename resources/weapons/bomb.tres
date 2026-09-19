@@ -8,3 +8,5 @@ script = ExtResource("1_definition")
 weapon_id = &"bomb"
 display_name = "Bomb"
 attack_scene = ExtResource("2_attack")
+spawn_placement = 0
+spawn_margin = 80.0

@@ -3,14 +3,14 @@
 [ext_resource type="Script" uid="uid://bqcd88emyu5kc" path="res://scripts/arena.gd" id="1_arena"]
 [ext_resource type="Script" uid="uid://cexdbd8phcctn" path="res://scripts/player.gd" id="2_player"]
 [ext_resource type="Script" uid="uid://c7t6glq16w8gp" path="res://scripts/health_display.gd" id="4_health"]
-[ext_resource type="Script" uid="uid://y26d113nhrvj" path="res://scripts/debug_attack_spawner.gd" id="5_spawner"]
-[ext_resource type="Script" path="res://scripts/game_manager.gd" id="6_game"]
-[ext_resource type="Script" path="res://scripts/phase_manager.gd" id="7_phase"]
+[ext_resource type="Script" path="res://scripts/attack_coordinator.gd" id="5_coordinator"]
+[ext_resource type="Script" uid="uid://yguq5ltbffbk" path="res://scripts/game_manager.gd" id="6_game"]
+[ext_resource type="Script" uid="uid://csqmmsurs4iox" path="res://scripts/phase_manager.gd" id="7_phase"]
 [ext_resource type="PackedScene" path="res://scenes/ui/preparation_panel.tscn" id="8_panel"]
 [ext_resource type="Resource" path="res://resources/weapons/sword.tres" id="9_sword"]
 [ext_resource type="Resource" path="res://resources/weapons/bomb.tres" id="10_bomb"]
 [ext_resource type="Resource" path="res://resources/weapons/laser.tres" id="11_laser"]
-[ext_resource type="Script" path="res://scripts/phase_display.gd" id="12_phase_display"]
+[ext_resource type="Script" uid="uid://bfiwp174qegd8" path="res://scripts/phase_display.gd" id="12_phase_display"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_player"]
 radius = 16.0
@@ -20,17 +20,19 @@ script = ExtResource("6_game")
 player_one_path = NodePath("ArenaP1/Player")
 player_two_path = NodePath("ArenaP2/Player")
 phase_manager_path = NodePath("PhaseManager")
-debug_attack_spawner_path = NodePath("DebugAttackSpawner")
+attack_coordinator_path = NodePath("AttackCoordinator")
 
-[node name="PhaseManager" type="Node" parent="."]
+[node name="PhaseManager" type="Node" parent="." unique_id=1087593066]
 script = ExtResource("7_phase")
 
-[node name="DebugAttackSpawner" type="Node2D" parent="."]
-script = ExtResource("5_spawner")
-arena_p1_path = NodePath("../ArenaP1")
-arena_p2_path = NodePath("../ArenaP2")
+[node name="AttackCoordinator" type="Node2D" parent="." unique_id=1396881443]
+script = ExtResource("5_coordinator")
+player_one_path = NodePath("../ArenaP1/Player")
+player_one_target_arena_path = NodePath("../ArenaP2")
+player_two_path = NodePath("../ArenaP2/Player")
+player_two_target_arena_path = NodePath("../ArenaP1")
 
-[node name="AttackSpawnTimer" type="Timer" parent="DebugAttackSpawner" unique_id=1786318929]
+[node name="AttackSpawnTimer" type="Timer" parent="AttackCoordinator" unique_id=1786318929]
 wait_time = 2.5
 
 [node name="ArenaP1" type="Node2D" parent="." unique_id=2058010337]
@@ -78,7 +80,7 @@ default_color = Color(0.32, 0.36, 0.46, 1)
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=1578133581]
 
-[node name="PhaseLabel" type="Label" parent="HUD"]
+[node name="PhaseLabel" type="Label" parent="HUD" unique_id=98338654]
 offset_left = 440.0
 offset_top = 82.0
 offset_right = 840.0
@@ -114,12 +116,11 @@ script = ExtResource("4_health")
 player_path = NodePath("../../ArenaP2/Player")
 player_label = "P2 HP"
 
-[node name="P1PreparationPanel" parent="HUD" instance=ExtResource("8_panel")]
+[node name="P1PreparationPanel" parent="HUD" unique_id=668283574 instance=ExtResource("8_panel")]
 offset_left = 60.0
 offset_top = 140.0
 offset_right = 600.0
 offset_bottom = 364.0
-player_title = "P1"
 player_path = NodePath("../../ArenaP1/Player")
 phase_manager_path = NodePath("../../PhaseManager")
 weapon_catalog = Array[Resource]([ExtResource("9_sword"), ExtResource("10_bomb"), ExtResource("11_laser")])
@@ -132,7 +133,7 @@ equip_action = &"p1_equip_selected"
 ready_action = &"p1_toggle_ready"
 instruction_text = "Q/E: weapon   1/2/3: slot   R: equip   F: ready"
 
-[node name="P2PreparationPanel" parent="HUD" instance=ExtResource("8_panel")]
+[node name="P2PreparationPanel" parent="HUD" unique_id=815525979 instance=ExtResource("8_panel")]
 offset_left = 680.0
 offset_top = 140.0
 offset_right = 1220.0

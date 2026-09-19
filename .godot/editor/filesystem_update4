@@ -1,2 +1,7 @@
-res://scripts/debug_attack_spawner.gd
-res://scripts/player.gd
+res://resources/weapons/bomb.tres
+res://resources/weapons/laser.tres
+res://resources/weapons/sword.tres
+res://scripts/arena.gd
+res://scripts/game_manager.gd
+res://scripts/phase_manager.gd
+res://scripts/weapon_definition.gd
