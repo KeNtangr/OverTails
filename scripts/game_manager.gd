@@ -5,6 +5,14 @@ const PlayerScript = preload("res://scripts/player.gd")
 const PhaseManagerScript = preload("res://scripts/phase_manager.gd")
 const AttackCoordinatorScript = preload("res://scripts/attack_coordinator.gd")
 
+enum MatchResult {
+	PLAYER_ONE_WINS,
+	PLAYER_TWO_WINS,
+	DRAW,
+}
+
+signal match_finished(result: MatchResult)
+
 @export var player_one_path: NodePath
 @export var player_two_path: NodePath
 @export var phase_manager_path: NodePath
@@ -19,6 +27,10 @@ const AttackCoordinatorScript = preload("res://scripts/attack_coordinator.gd")
 	get_node_or_null(attack_coordinator_path) as AttackCoordinatorScript
 )
 
+var _match_finished: bool = false
+var _death_resolution_pending: bool = false
+var _restart_requested: bool = false
+
 
 func _ready() -> void:
 	if (
@@ -30,4 +42,53 @@ func _ready() -> void:
 		push_error("GameManager requires both players, PhaseManager, and AttackCoordinator.")
 		return
 
+	player_one.died.connect(_on_player_died)
+	player_two.died.connect(_on_player_died)
 	phase_manager.configure(player_one, player_two, attack_coordinator)
+
+
+func is_match_finished() -> bool:
+	return _match_finished
+
+
+func restart_match() -> void:
+	if (
+		not _match_finished
+		or phase_manager.current_phase != PhaseManagerScript.Phase.MATCH_OVER
+		or _restart_requested
+	):
+		return
+
+	_restart_requested = true
+	get_tree().reload_current_scene()
+
+
+func _on_player_died() -> void:
+	if _match_finished or _death_resolution_pending:
+		return
+
+	_death_resolution_pending = true
+	_resolve_deaths.call_deferred()
+
+
+func _resolve_deaths() -> void:
+	_death_resolution_pending = false
+	if _match_finished:
+		return
+
+	var player_one_dead := player_one.current_hp <= 0
+	var player_two_dead := player_two.current_hp <= 0
+	if not player_one_dead and not player_two_dead:
+		return
+
+	var result: MatchResult
+	if player_one_dead and player_two_dead:
+		result = MatchResult.DRAW
+	elif player_one_dead:
+		result = MatchResult.PLAYER_TWO_WINS
+	else:
+		result = MatchResult.PLAYER_ONE_WINS
+
+	_match_finished = true
+	phase_manager.enter_match_over()
+	match_finished.emit(result)

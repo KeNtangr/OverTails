@@ -57,6 +57,16 @@ func set_spawning_enabled(enabled: bool) -> void:
 		spawn_timer.stop()
 
 
+func stop_and_clear_attacks() -> void:
+	_spawning_enabled = false
+	spawn_timer.stop()
+
+	if player_one_target_arena != null:
+		player_one_target_arena.clear_spawned_attacks()
+	if player_two_target_arena != null:
+		player_two_target_arena.clear_spawned_attacks()
+
+
 func is_spawning_enabled() -> bool:
 	return _spawning_enabled
 

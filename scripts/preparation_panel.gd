@@ -139,9 +139,12 @@ func _on_player_ready_changed(changed_player_index: int, _is_ready: bool) -> voi
 
 
 func _on_phase_changed(_previous_phase: int, current_phase: int) -> void:
-	_editing_enabled = current_phase == PhaseManagerScript.Phase.PREPARATION
-	preparation_content.visible = _editing_enabled
-	attack_summary_label.visible = not _editing_enabled
+	var preparation_active := current_phase == PhaseManagerScript.Phase.PREPARATION
+	var attack_active := current_phase == PhaseManagerScript.Phase.ATTACK
+	_editing_enabled = preparation_active
+	visible = preparation_active or attack_active
+	preparation_content.visible = preparation_active
+	attack_summary_label.visible = attack_active
 	var panel_height := 224.0 if _editing_enabled else 54.0
 	custom_minimum_size.y = panel_height
 	size.y = panel_height

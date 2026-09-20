@@ -1,7 +1,9 @@
-res://resources/weapons/bomb.tres
-res://resources/weapons/laser.tres
-res://resources/weapons/sword.tres
 res://scripts/arena.gd
+res://scripts/attack_coordinator.gd
+res://scripts/bomb_attack.gd
 res://scripts/game_manager.gd
+res://scripts/laser_attack.gd
+res://scripts/phase_display.gd
 res://scripts/phase_manager.gd
-res://scripts/weapon_definition.gd
+res://scripts/preparation_panel.gd
+res://scripts/sword_attack.gd

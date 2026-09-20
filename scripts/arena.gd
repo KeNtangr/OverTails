@@ -8,6 +8,8 @@ const WeaponDefinitionScript = preload("res://scripts/weapon_definition.gd")
 @export var background_color: Color = Color(0.07, 0.09, 0.14, 1.0)
 @export var border_color: Color = Color(0.55, 0.65, 0.85, 1.0)
 
+var _spawned_attacks: Array[Node2D] = []
+
 
 func _ready() -> void:
 	queue_redraw()
@@ -49,8 +51,48 @@ func spawn_attack(attack_scene: PackedScene, local_position: Vector2) -> Node2D:
 
 	var attack := instance as Node2D
 	attack.position = local_position
+	_spawned_attacks.append(attack)
+	attack.tree_exited.connect(_on_spawned_attack_exited.bind(attack))
 	add_child(attack)
 	return attack
+
+
+func clear_spawned_attacks() -> void:
+	var attacks: Array[Node2D] = _spawned_attacks.duplicate()
+	_spawned_attacks.clear()
+
+	for attack: Node2D in attacks:
+		if not is_instance_valid(attack):
+			continue
+		attack.process_mode = Node.PROCESS_MODE_DISABLED
+		if attack.has_method(&"cancel_attack"):
+			attack.call(&"cancel_attack")
+		else:
+			_disable_attack_collision(attack)
+			attack.queue_free()
+
+
+func get_active_attack_count() -> int:
+	var active_count: int = 0
+	for attack: Node2D in _spawned_attacks:
+		if is_instance_valid(attack) and not attack.is_queued_for_deletion():
+			active_count += 1
+	return active_count
+
+
+func _on_spawned_attack_exited(attack: Node2D) -> void:
+	_spawned_attacks.erase(attack)
+
+
+func _disable_attack_collision(attack: Node2D) -> void:
+	if attack is Area2D:
+		var attack_area := attack as Area2D
+		attack_area.monitoring = false
+		attack_area.monitorable = false
+
+	for child: Node in attack.find_children("*", "CollisionShape2D", true, false):
+		var collision_shape := child as CollisionShape2D
+		collision_shape.disabled = true
 
 
 func get_random_position(margin: float = 80.0) -> Vector2:

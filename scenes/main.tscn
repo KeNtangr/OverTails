@@ -11,6 +11,7 @@
 [ext_resource type="Resource" path="res://resources/weapons/bomb.tres" id="10_bomb"]
 [ext_resource type="Resource" path="res://resources/weapons/laser.tres" id="11_laser"]
 [ext_resource type="Script" uid="uid://bfiwp174qegd8" path="res://scripts/phase_display.gd" id="12_phase_display"]
+[ext_resource type="Script" path="res://scripts/match_flow_ui.gd" id="13_match_flow_ui"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_player"]
 radius = 16.0
@@ -24,6 +25,14 @@ attack_coordinator_path = NodePath("AttackCoordinator")
 
 [node name="PhaseManager" type="Node" parent="." unique_id=1087593066]
 script = ExtResource("7_phase")
+
+[node name="AttackPhaseTimer" type="Timer" parent="PhaseManager"]
+wait_time = 15.0
+one_shot = true
+
+[node name="ResultsPhaseTimer" type="Timer" parent="PhaseManager"]
+wait_time = 3.0
+one_shot = true
 
 [node name="AttackCoordinator" type="Node2D" parent="." unique_id=1396881443]
 script = ExtResource("5_coordinator")
@@ -81,9 +90,9 @@ default_color = Color(0.32, 0.36, 0.46, 1)
 [node name="HUD" type="CanvasLayer" parent="." unique_id=1578133581]
 
 [node name="PhaseLabel" type="Label" parent="HUD" unique_id=98338654]
-offset_left = 440.0
+offset_left = 300.0
 offset_top = 82.0
-offset_right = 840.0
+offset_right = 980.0
 offset_bottom = 114.0
 theme_override_colors/font_color = Color(0.95, 0.95, 1, 1)
 theme_override_font_sizes/font_size = 22
@@ -151,3 +160,93 @@ select_slot_three_action = &"p2_select_slot_3"
 equip_action = &"p2_equip_selected"
 ready_action = &"p2_toggle_ready"
 instruction_text = "J/L: weapon   7/8/9: slot   I: equip   O: ready"
+
+[node name="MatchFlowUI" type="Control" parent="HUD"]
+z_index = 10
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("13_match_flow_ui")
+game_manager_path = NodePath("../..")
+phase_manager_path = NodePath("../../PhaseManager")
+
+[node name="ResultsPanel" type="PanelContainer" parent="HUD/MatchFlowUI"]
+visible = false
+layout_mode = 0
+offset_left = 430.0
+offset_top = 250.0
+offset_right = 850.0
+offset_bottom = 450.0
+mouse_filter = 2
+
+[node name="Margin" type="MarginContainer" parent="HUD/MatchFlowUI/ResultsPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 22
+
+[node name="Content" type="VBoxContainer" parent="HUD/MatchFlowUI/ResultsPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="HUD/MatchFlowUI/ResultsPanel/Margin/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "ROUND 1 RESULTS"
+horizontal_alignment = 1
+
+[node name="P1HealthLabel" type="Label" parent="HUD/MatchFlowUI/ResultsPanel/Margin/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+text = "P1 HP: 150 / 150"
+horizontal_alignment = 1
+
+[node name="P2HealthLabel" type="Label" parent="HUD/MatchFlowUI/ResultsPanel/Margin/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+text = "P2 HP: 150 / 150"
+horizontal_alignment = 1
+
+[node name="MatchOverPanel" type="PanelContainer" parent="HUD/MatchFlowUI"]
+visible = false
+layout_mode = 0
+offset_left = 430.0
+offset_top = 220.0
+offset_right = 850.0
+offset_bottom = 500.0
+
+[node name="Margin" type="MarginContainer" parent="HUD/MatchFlowUI/MatchOverPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 26
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 26
+
+[node name="Content" type="VBoxContainer" parent="HUD/MatchFlowUI/MatchOverPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 18
+alignment = 1
+
+[node name="ResultLabel" type="Label" parent="HUD/MatchFlowUI/MatchOverPanel/Margin/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+text = "MATCH OVER"
+horizontal_alignment = 1
+
+[node name="InstructionLabel" type="Label" parent="HUD/MatchFlowUI/MatchOverPanel/Margin/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Press ENTER or click Restart"
+horizontal_alignment = 1
+
+[node name="RestartButton" type="Button" parent="HUD/MatchFlowUI/MatchOverPanel/Margin/Content"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Restart"

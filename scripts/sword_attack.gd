@@ -8,6 +8,7 @@ signal finished
 @export_range(1, 1000, 1) var damage: int = 10
 
 var _damaged_body_ids: Dictionary = {}
+var _cancelled: bool = false
 
 @onready var warning_line: Polygon2D = $WarningLine
 @onready var active_slash: Polygon2D = $ActiveSlash
@@ -21,6 +22,8 @@ func _ready() -> void:
 
 func _run_attack() -> void:
 	await get_tree().create_timer(warning_duration).timeout
+	if _cancelled:
+		return
 
 	warning_line.visible = false
 	active_slash.visible = true
@@ -28,12 +31,26 @@ func _run_attack() -> void:
 	collision_shape.disabled = false
 
 	await get_tree().physics_frame
+	if _cancelled:
+		return
 	_damage_existing_overlaps()
 	await get_tree().create_timer(active_duration).timeout
+	if _cancelled:
+		return
 
 	monitoring = false
 	collision_shape.disabled = true
 	finished.emit()
+	queue_free()
+
+
+func cancel_attack() -> void:
+	if _cancelled:
+		return
+	_cancelled = true
+	monitoring = false
+	monitorable = false
+	collision_shape.disabled = true
 	queue_free()
 
 
@@ -47,6 +64,8 @@ func _on_body_entered(body: Node2D) -> void:
 
 
 func _try_damage(body: Node2D) -> void:
+	if _cancelled:
+		return
 	var body_id: int = body.get_instance_id()
 	if _damaged_body_ids.has(body_id) or not body.has_method(&"take_damage"):
 		return
