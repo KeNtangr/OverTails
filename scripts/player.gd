@@ -9,6 +9,8 @@ const LOADOUT_SIZE: int = 3
 signal health_changed(current_hp: int, max_hp: int)
 signal died
 signal loadout_changed(slot_index: int, weapon: WeaponDefinitionScript)
+signal money_changed(current_money: int)
+signal inventory_changed
 
 @export_range(1.0, 1000.0, 1.0) var move_speed: float = 360.0
 @export_range(1.0, 64.0, 1.0) var body_radius: float = 16.0
@@ -21,6 +23,8 @@ signal loadout_changed(slot_index: int, weapon: WeaponDefinitionScript)
 var current_hp: int
 var _movement_enabled: bool = true
 var _loadout: Array[WeaponDefinitionScript] = []
+var _money: int = 0
+var _owned_weapons: Array[WeaponDefinitionScript] = []
 
 @onready var arena: ArenaScript = get_parent() as ArenaScript
 
@@ -68,19 +72,131 @@ func is_movement_enabled() -> bool:
 	return _movement_enabled
 
 
-func set_loadout_slot(slot_index: int, weapon: WeaponDefinitionScript) -> bool:
-	if not _is_valid_loadout_slot(slot_index):
-		return false
-	if _loadout[slot_index] == weapon:
-		return true
+func reset_progression(starting_money: int, starting_weapon: WeaponDefinitionScript) -> void:
+	_money = maxi(starting_money, 0)
+	_owned_weapons.clear()
+	for slot_index: int in range(LOADOUT_SIZE):
+		_loadout[slot_index] = null
 
-	_loadout[slot_index] = weapon
-	loadout_changed.emit(slot_index, weapon)
+	if starting_weapon != null:
+		_owned_weapons.append(starting_weapon)
+		_loadout[0] = starting_weapon
+
+	money_changed.emit(_money)
+	inventory_changed.emit()
+	for slot_index: int in range(LOADOUT_SIZE):
+		loadout_changed.emit(slot_index, _loadout[slot_index])
+
+
+func get_money() -> int:
+	return _money
+
+
+func grant_money(amount: int) -> bool:
+	if amount <= 0:
+		return false
+	_money += amount
+	money_changed.emit(_money)
 	return true
 
 
-func clear_loadout_slot(slot_index: int) -> bool:
-	return set_loadout_slot(slot_index, null)
+func get_owned_weapons() -> Array[WeaponDefinitionScript]:
+	return _owned_weapons.duplicate()
+
+
+func get_owned_weapon_types() -> Array[WeaponDefinitionScript]:
+	var unique_weapons: Array[WeaponDefinitionScript] = []
+	for weapon: WeaponDefinitionScript in _owned_weapons:
+		if not unique_weapons.has(weapon):
+			unique_weapons.append(weapon)
+	return unique_weapons
+
+
+func get_owned_count(weapon: WeaponDefinitionScript) -> int:
+	if weapon == null:
+		return 0
+	var count: int = 0
+	for owned_weapon: WeaponDefinitionScript in _owned_weapons:
+		if owned_weapon == weapon:
+			count += 1
+	return count
+
+
+func get_equipped_count(weapon: WeaponDefinitionScript) -> int:
+	if weapon == null:
+		return 0
+	var count: int = 0
+	for equipped_weapon: WeaponDefinitionScript in _loadout:
+		if equipped_weapon == weapon:
+			count += 1
+	return count
+
+
+func get_available_count(weapon: WeaponDefinitionScript) -> int:
+	return maxi(get_owned_count(weapon) - get_equipped_count(weapon), 0)
+
+
+func add_owned_weapon(weapon: WeaponDefinitionScript) -> bool:
+	if weapon == null:
+		return false
+	_owned_weapons.append(weapon)
+	inventory_changed.emit()
+	return true
+
+
+func try_purchase_weapon(weapon: WeaponDefinitionScript) -> bool:
+	if (
+		weapon == null
+		or weapon.weapon_id == &""
+		or weapon.display_name.strip_edges().is_empty()
+		or weapon.attack_scene == null
+		or not weapon.purchasable
+		or weapon.purchase_price < 0
+		or _money < weapon.purchase_price
+	):
+		return false
+
+	_money -= weapon.purchase_price
+	_owned_weapons.append(weapon)
+	money_changed.emit(_money)
+	inventory_changed.emit()
+	return true
+
+
+func try_equip_weapon(slot_index: int, weapon: WeaponDefinitionScript) -> bool:
+	if not _is_valid_loadout_slot(slot_index) or weapon == null:
+		return false
+	if _loadout[slot_index] == weapon:
+		return true
+	if get_available_count(weapon) <= 0:
+		return false
+
+	_set_loadout_slot(slot_index, weapon)
+	return true
+
+
+func try_unequip_slot(slot_index: int) -> bool:
+	if not _is_valid_loadout_slot(slot_index):
+		return false
+	if _loadout[slot_index] == null:
+		return true
+
+	_set_loadout_slot(slot_index, null)
+	return true
+
+
+func try_swap_loadout_slots(first_slot: int, second_slot: int) -> bool:
+	if not _is_valid_loadout_slot(first_slot) or not _is_valid_loadout_slot(second_slot):
+		return false
+	if first_slot == second_slot:
+		return true
+
+	var first_weapon := _loadout[first_slot]
+	_loadout[first_slot] = _loadout[second_slot]
+	_loadout[second_slot] = first_weapon
+	loadout_changed.emit(first_slot, _loadout[first_slot])
+	loadout_changed.emit(second_slot, _loadout[second_slot])
+	return true
 
 
 func get_loadout_slot(slot_index: int) -> WeaponDefinitionScript:
@@ -102,6 +218,11 @@ func has_equipped_weapon() -> bool:
 
 func _is_valid_loadout_slot(slot_index: int) -> bool:
 	return slot_index >= 0 and slot_index < LOADOUT_SIZE
+
+
+func _set_loadout_slot(slot_index: int, weapon: WeaponDefinitionScript) -> void:
+	_loadout[slot_index] = weapon
+	loadout_changed.emit(slot_index, weapon)
 
 
 func take_damage(amount: int) -> void:

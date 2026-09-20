@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/preparation_panel.gd" id="1_panel"]
 
 [node name="PreparationPanel" type="PanelContainer"]
-custom_minimum_size = Vector2(540, 224)
+custom_minimum_size = Vector2(540, 482)
 script = ExtResource("1_panel")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
@@ -20,35 +20,150 @@ theme_override_constants/separation = 6
 [node name="TitleLabel" type="Label" parent="MarginContainer/Content"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "PLAYER LOADOUT"
+text = "PLAYER SHOP & LOADOUT"
 
 [node name="PreparationContent" type="VBoxContainer" parent="MarginContainer/Content"]
 layout_mode = 2
-theme_override_constants/separation = 3
+theme_override_constants/separation = 5
 
-[node name="SelectedWeaponLabel" type="Label" parent="MarginContainer/Content/PreparationContent"]
+[node name="MoneyLabel" type="Label" parent="MarginContainer/Content/PreparationContent"]
 layout_mode = 2
-text = "Selected weapon: Sword"
+theme_override_font_sizes/font_size = 18
+text = "Money: $120"
+
+[node name="ShopTitle" type="Label" parent="MarginContainer/Content/PreparationContent"]
+layout_mode = 2
+text = "SHOP"
+
+[node name="ShopButtons" type="HBoxContainer" parent="MarginContainer/Content/PreparationContent"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ShopButton1" type="Button" parent="MarginContainer/Content/PreparationContent/ShopButtons"]
+custom_minimum_size = Vector2(180, 32)
+layout_mode = 2
+text = "Buy Laser  $60"
+
+[node name="ShopButton2" type="Button" parent="MarginContainer/Content/PreparationContent/ShopButtons"]
+custom_minimum_size = Vector2(180, 32)
+layout_mode = 2
+text = "Buy Bomb  $100"
+
+[node name="InventoryTitle" type="Label" parent="MarginContainer/Content/PreparationContent"]
+layout_mode = 2
+text = "INVENTORY"
+
+[node name="InventoryList" type="VBoxContainer" parent="MarginContainer/Content/PreparationContent"]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="InventoryLabel1" type="Label" parent="MarginContainer/Content/PreparationContent/InventoryList"]
+layout_mode = 2
+text = "Sword - Owned 1 / Equipped 1 / Available 0"
+
+[node name="InventoryLabel2" type="Label" parent="MarginContainer/Content/PreparationContent/InventoryList"]
+layout_mode = 2
+text = "Laser - Owned 0 / Equipped 0 / Available 0"
+
+[node name="InventoryLabel3" type="Label" parent="MarginContainer/Content/PreparationContent/InventoryList"]
+layout_mode = 2
+text = "Bomb - Owned 0 / Equipped 0 / Available 0"
+
+[node name="LoadoutTitle" type="Label" parent="MarginContainer/Content/PreparationContent"]
+layout_mode = 2
+text = "LOADOUT"
+
+[node name="SelectedWeaponRow" type="HBoxContainer" parent="MarginContainer/Content/PreparationContent"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="PreviousWeaponButton" type="Button" parent="MarginContainer/Content/PreparationContent/SelectedWeaponRow"]
+custom_minimum_size = Vector2(34, 30)
+layout_mode = 2
+text = "<"
+
+[node name="SelectedWeaponLabel" type="Label" parent="MarginContainer/Content/PreparationContent/SelectedWeaponRow"]
+custom_minimum_size = Vector2(310, 0)
+layout_mode = 2
+text = "Owned selection: Sword"
+vertical_alignment = 1
+
+[node name="NextWeaponButton" type="Button" parent="MarginContainer/Content/PreparationContent/SelectedWeaponRow"]
+custom_minimum_size = Vector2(34, 30)
+layout_mode = 2
+text = ">"
 
 [node name="SelectedSlotLabel" type="Label" parent="MarginContainer/Content/PreparationContent"]
 layout_mode = 2
 text = "Target slot: 1"
 
-[node name="Slot1Label" type="Label" parent="MarginContainer/Content/PreparationContent"]
+[node name="SlotButtons" type="HBoxContainer" parent="MarginContainer/Content/PreparationContent"]
 layout_mode = 2
-text = "> Slot 1: Empty"
+theme_override_constants/separation = 5
 
-[node name="Slot2Label" type="Label" parent="MarginContainer/Content/PreparationContent"]
+[node name="Slot1Button" type="Button" parent="MarginContainer/Content/PreparationContent/SlotButtons"]
+custom_minimum_size = Vector2(165, 34)
+layout_mode = 2
+text = "> Slot 1: Sword"
+
+[node name="Slot2Button" type="Button" parent="MarginContainer/Content/PreparationContent/SlotButtons"]
+custom_minimum_size = Vector2(165, 34)
 layout_mode = 2
 text = "  Slot 2: Empty"
 
-[node name="Slot3Label" type="Label" parent="MarginContainer/Content/PreparationContent"]
+[node name="Slot3Button" type="Button" parent="MarginContainer/Content/PreparationContent/SlotButtons"]
+custom_minimum_size = Vector2(165, 34)
 layout_mode = 2
 text = "  Slot 3: Empty"
 
-[node name="ReadyStateLabel" type="Label" parent="MarginContainer/Content/PreparationContent"]
+[node name="LoadoutActions" type="HBoxContainer" parent="MarginContainer/Content/PreparationContent"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="EquipButton" type="Button" parent="MarginContainer/Content/PreparationContent/LoadoutActions"]
+custom_minimum_size = Vector2(170, 32)
+layout_mode = 2
+text = "Equip / Replace"
+
+[node name="UnequipButton" type="Button" parent="MarginContainer/Content/PreparationContent/LoadoutActions"]
+custom_minimum_size = Vector2(150, 32)
+layout_mode = 2
+text = "Unequip"
+
+[node name="RearrangeActions" type="HBoxContainer" parent="MarginContainer/Content/PreparationContent"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SwapLeftButton" type="Button" parent="MarginContainer/Content/PreparationContent/RearrangeActions"]
+custom_minimum_size = Vector2(170, 30)
+layout_mode = 2
+text = "Swap with Left"
+
+[node name="SwapRightButton" type="Button" parent="MarginContainer/Content/PreparationContent/RearrangeActions"]
+custom_minimum_size = Vector2(170, 30)
+layout_mode = 2
+text = "Swap with Right"
+
+[node name="ReadyRow" type="HBoxContainer" parent="MarginContainer/Content/PreparationContent"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ReadyStateLabel" type="Label" parent="MarginContainer/Content/PreparationContent/ReadyRow"]
+custom_minimum_size = Vector2(310, 0)
 layout_mode = 2
 text = "State: EDITING"
+vertical_alignment = 1
+
+[node name="ReadyButton" type="Button" parent="MarginContainer/Content/PreparationContent/ReadyRow"]
+custom_minimum_size = Vector2(150, 34)
+layout_mode = 2
+text = "Ready"
+
+[node name="FeedbackLabel" type="Label" parent="MarginContainer/Content/PreparationContent"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.78, 0.35, 1)
+text = ""
 
 [node name="InstructionsLabel" type="Label" parent="MarginContainer/Content/PreparationContent"]
 layout_mode = 2
@@ -58,5 +173,5 @@ autowrap_mode = 2
 [node name="AttackSummaryLabel" type="Label" parent="MarginContainer/Content"]
 visible = false
 layout_mode = 2
-text = "P1: Empty | Empty | Empty"
+text = "P1: Sword | Empty | Empty"
 autowrap_mode = 2

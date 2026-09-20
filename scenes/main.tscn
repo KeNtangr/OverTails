@@ -12,6 +12,7 @@
 [ext_resource type="Resource" path="res://resources/weapons/laser.tres" id="11_laser"]
 [ext_resource type="Script" uid="uid://bfiwp174qegd8" path="res://scripts/phase_display.gd" id="12_phase_display"]
 [ext_resource type="Script" path="res://scripts/match_flow_ui.gd" id="13_match_flow_ui"]
+[ext_resource type="Script" path="res://scripts/economy_manager.gd" id="14_economy"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_player"]
 radius = 16.0
@@ -22,6 +23,11 @@ player_one_path = NodePath("ArenaP1/Player")
 player_two_path = NodePath("ArenaP2/Player")
 phase_manager_path = NodePath("PhaseManager")
 attack_coordinator_path = NodePath("AttackCoordinator")
+economy_manager_path = NodePath("EconomyManager")
+
+[node name="EconomyManager" type="Node" parent="."]
+script = ExtResource("14_economy")
+starting_weapon = ExtResource("9_sword")
 
 [node name="PhaseManager" type="Node" parent="." unique_id=1087593066]
 script = ExtResource("7_phase")
@@ -132,7 +138,8 @@ offset_right = 600.0
 offset_bottom = 364.0
 player_path = NodePath("../../ArenaP1/Player")
 phase_manager_path = NodePath("../../PhaseManager")
-weapon_catalog = Array[Resource]([ExtResource("9_sword"), ExtResource("10_bomb"), ExtResource("11_laser")])
+economy_manager_path = NodePath("../../EconomyManager")
+weapon_catalog = Array[Resource]([ExtResource("9_sword"), ExtResource("11_laser"), ExtResource("10_bomb")])
 previous_weapon_action = &"p1_weapon_previous"
 next_weapon_action = &"p1_weapon_next"
 select_slot_one_action = &"p1_select_slot_1"
@@ -140,7 +147,7 @@ select_slot_two_action = &"p1_select_slot_2"
 select_slot_three_action = &"p1_select_slot_3"
 equip_action = &"p1_equip_selected"
 ready_action = &"p1_toggle_ready"
-instruction_text = "Q/E: weapon   1/2/3: slot   R: equip   F: ready"
+instruction_text = "Q/E: owned weapon   1/2/3: slot   R: equip   F: ready"
 
 [node name="P2PreparationPanel" parent="HUD" unique_id=815525979 instance=ExtResource("8_panel")]
 offset_left = 680.0
@@ -151,7 +158,8 @@ player_index = 1
 player_title = "P2"
 player_path = NodePath("../../ArenaP2/Player")
 phase_manager_path = NodePath("../../PhaseManager")
-weapon_catalog = Array[Resource]([ExtResource("9_sword"), ExtResource("10_bomb"), ExtResource("11_laser")])
+economy_manager_path = NodePath("../../EconomyManager")
+weapon_catalog = Array[Resource]([ExtResource("9_sword"), ExtResource("11_laser"), ExtResource("10_bomb")])
 previous_weapon_action = &"p2_weapon_previous"
 next_weapon_action = &"p2_weapon_next"
 select_slot_one_action = &"p2_select_slot_1"
@@ -159,7 +167,7 @@ select_slot_two_action = &"p2_select_slot_2"
 select_slot_three_action = &"p2_select_slot_3"
 equip_action = &"p2_equip_selected"
 ready_action = &"p2_toggle_ready"
-instruction_text = "J/L: weapon   7/8/9: slot   I: equip   O: ready"
+instruction_text = "J/L: owned weapon   7/8/9: slot   I: equip   O: ready"
 
 [node name="MatchFlowUI" type="Control" parent="HUD"]
 z_index = 10

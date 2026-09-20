@@ -7,6 +7,8 @@
 script = ExtResource("1_definition")
 weapon_id = &"laser"
 display_name = "Laser"
+purchase_price = 60
+purchasable = true
 attack_scene = ExtResource("2_attack")
 spawn_placement = 1
 spawn_margin = 80.0
